@@ -3,36 +3,29 @@
 
 function moveplayer(dx,dy)
 	--finish end of the position
-	local destx,desty=p_x+dx,p_y+dy
+	local destx,desty=p_mob.x+dx,p_mob.y+dy
 	local tle=mget(destx,desty)
 	
-	if dx<0 then
-		p_flip=true
-	elseif dx>0 then
-	 p_flip=false
-	end
-	
-	if fget(tle,0) then
-		--wall
-		p_sox,p_soy=dx*8,dy*8
-	 p_ox,p_oy=0,0
-	 p_t=0
-	 _upd=update_pturn
-	 p_mov=mov_bump -- wall
-	 if fget(tle,1) then
-	 	trig_bump(tle,destx,desty)
-	 end
+
+	if iswalkable(destx,desty,"checkmobs") then
+		sfx(0,0)
+		mobwalk(p_mob,dx,dy)
+		p_t=0
+		_upd=update_pturn
 	else
-	 sfx(0,0)
-		p_x+=dx
-	 p_y+=dy
-	 --use an value to neutralize
-	 --the offset(animate the action) 
-	 p_sox,p_soy=-dx*8,-dy*8
-	 p_ox,p_oy=-dx*8,-dy*8
-	 p_t=0
-	 _upd=update_pturn
-	 p_mov=mov_walk -- normal walk
+		--not walkable
+		mobbump(p_mob,dx,dy)
+		p_t=0
+		_upd=update_pturn
+		
+	 local mob=getmob(destx,desty)
+	 if mob==false then
+	 	if fget(tle,1) then
+	 		trig_bump(tle,destx,desty)
+	 	end
+	 else
+	 	hitmob(p_mob,mob)	
+	 end 
 	end
 end
 
@@ -55,4 +48,35 @@ function trig_bump(tle,destx,desty)
  	--showmsg("hello world",120)
  	showmsg({"welcome to ","dark planet","","climb the mountain ","to reach the truth"})
  end
+end
+
+function getmob(x,y)
+	for m in all(mob) do
+		if m.x==x and m.y==y then
+			return m
+		end
+	end
+	return false
+end
+
+function iswalkable(x,y,mode)
+	if mode==nil then mode="" end
+	if inbounds(x,y) then
+		local tle=mget(x,y)
+		if fget(tle,0)==false then
+			if mode=="checkmobs" then
+				return getmob(x,y)==false
+			end
+			return true
+		end
+	end
+	return false
+end
+
+function inbounds(x,y)
+	return not(x<0 or y<0 or x>15 or y>15)
+end
+
+function hitmob(atkm,defm)
+	
 end

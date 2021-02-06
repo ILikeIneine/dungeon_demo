@@ -17,7 +17,7 @@ end --function
 function update_pturn()
 	checkbuttbuff()
 	p_t=min(p_t+0.125,1)	
-	p_mov()
+	p_mob.mov(p_mob,p_t)
 	
 	if p_t==1 then
 		_upd=update_game
@@ -28,22 +28,6 @@ end -- smooth!!!!!
 function update_gameover()
 
 end
-
-
-function mov_walk()
-	p_ox=p_sox*(1-p_t)
-	p_oy=p_soy*(1-p_t)
-end
-
-
-function mov_bump()
-	local tme=p_t
-	if tme>0.5 then
-		tme=1-p_t
-	end
-	p_ox=p_sox*tme
-	p_oy=p_soy*tme
-end -- wall duang!
 
 
 function checkbuttbuff()
