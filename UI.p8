@@ -1,3 +1,7 @@
+pico-8 cartridge // http://www.pico-8.com
+version 16
+__lua__
+
 -- ui
 
 function addwind(_x,_y,_w,_h,_txt)
@@ -44,4 +48,27 @@ end
 function showmsg(txt)
 	talkwind=addwind(16,32,94,#txt*6+7,txt)
 	talkwind.butt=true
+end
+
+function addfloat(_txt,_x,_y,_c)
+	add(float,{txt=_txt,x=_x,y=_y,c=_c,ty=_y-10,t=0})
+end
+
+function dofloats()
+	for f in all(float) do
+		f.y+=(f.ty-f.y)/10
+		f.t+=1
+		if f.t>70 then
+			del(float,f)
+		end
+	end
+end
+
+function dohpwind()
+	hpwind.txt[1]="♥"..p_mob.hp.."/"..p_mob.hpmax
+	local hpy=5
+	if p_mob.y<8 then
+		hpy=110
+	end
+	hpwind.y+=(hpy-hpwind.y)/5
 end

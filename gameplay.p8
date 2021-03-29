@@ -1,3 +1,7 @@
+pico-8 cartridge // http://www.pico-8.com
+version 16
+__lua__
+
 -- gameplay
 -- core details
 
@@ -78,5 +82,46 @@ function inbounds(x,y)
 end
 
 function hitmob(atkm,defm)
+	local dmg=atkm.atk
+	defm.hp-=dmg
+	defm.flash=10
 	
+	addfloat("-"..dmg,defm.x*8,defm.y*8,9)
+	
+	if defm.hp<=0 then
+		--what if defm is player
+		add(dmob,defm)
+		del(mob,defm)
+		defm.dur=60
+	end
 end
+
+function checkend()
+	if p_mob.hp<=0 then
+		wind={}
+		_upd=update_gover
+		_drw=draw_gover
+		fadeout(0.02)
+		return false
+	end
+	return true
+end 
+
+function los(x1, y1, x2, y2)
+	local frst, sx, sy, dx, dy=true
+
+	if dist(x1,y1,x2,y2)==1 then return
+	if x1<x2 then
+		sx=1
+		dx=x2-x1
+	else
+		sx=-1
+		dx=x1-x2
+	end
+	if y1<y2 then
+		sy=1
+		dy=y2-y1
+	else
+		sy=-1
+		dy=y1-y2
+	end

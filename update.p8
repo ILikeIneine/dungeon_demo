@@ -1,3 +1,7 @@
+pico-8 cartridge // http://www.pico-8.com
+version 16
+__lua__
+
 -- update
 
 function update_game()
@@ -13,7 +17,6 @@ function update_game()
 	end
 end --function
 
-
 function update_pturn()
 	checkbuttbuff()
 	p_t=min(p_t+0.125,1)	
@@ -21,12 +24,32 @@ function update_pturn()
 	
 	if p_t==1 then
 		_upd=update_game
+		if checkend() then
+			doai()
+		end
+	end--if
+end -- smooth!!!!!
+
+function update_aiturn()
+	checkbuttbuff()
+	p_t=min(p_t+0.125,1)	
+	for m in all(mob) do
+		if m!=p_mob and m.mov then
+			m.mov(m,p_t)
+		end
+	end
+	if p_t==1 then
+		_upd=update_game
+		checkend()
 	end--if
 end -- smooth!!!!!
 
 
-function update_gameover()
-
+function update_gover()
+	if btnp(❎) then
+		fadeout()
+		startgame()
+	end
 end
 
 
@@ -50,7 +73,6 @@ end -- return button num
 function dobutt(butt)
 	if butt<0 then return end
 	if butt>=0 and butt<4 then
-	 moveplayer(dirx[butt+1],diry[butt+1])
-		return 
+	 moveplayer(dirx[butt+1],diry[butt+1]) 
 	end
 end

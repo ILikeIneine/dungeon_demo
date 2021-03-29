@@ -5,3 +5,6 @@ simple path finding
 # 3.21
 add fade in and fade out
 <line drawing algorithm>
+
+# 3.29 
+add more details
