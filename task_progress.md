@@ -10,3 +10,8 @@ add fade in and fade out
 add more details and finish the line drawing algorithm for test the mobs 
 sight 
 https://en.wikipedia.org/wiki/Line_drawing_algorithm
+
+# 4.9
+add fogs!
+add sight range!
+
