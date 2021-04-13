@@ -15,3 +15,13 @@ https://en.wikipedia.org/wiki/Line_drawing_algorithm
 add fogs!
 add sight range!
 
+# 4.12
+bug fixing 
+token twisted
+better eyesight!
+todo: line-of-sight algorithm gonna be modified...
+
+# 4.13
+path finding!
+path finding!!
+path finding!!!
