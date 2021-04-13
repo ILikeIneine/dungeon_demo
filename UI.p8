@@ -26,10 +26,10 @@ function drawind()
 			wy+=6 --linefeeder
 		end -- for
 		clip()
-		if w.dur!=nil then
+		if w.dur then
 			w.dur-=1
 			if w.dur<=0 then
-				local dif=wh/4
+				local dif=w.h/4
 				w.y+=dif/2
 				w.h-=dif
 				if w.h<3 then

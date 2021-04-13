@@ -20,22 +20,23 @@ end --function
 function update_pturn()
 	checkbuttbuff()
 	p_t=min(p_t+0.125,1)	
-	p_mob.mov(p_mob,p_t)
+	p_mob:mov()
 	
-	if p_t==1 then
+	if p_t==1 then	
 		_upd=update_game
 		if checkend() then
 			doai()
 		end
+		calcdist(p_mob.x,p_mob.y)
 	end--if
-end -- smooth!!!!!
+end
 
 function update_aiturn()
 	checkbuttbuff()
 	p_t=min(p_t+0.125,1)	
 	for m in all(mob) do
 		if m!=p_mob and m.mov then
-			m.mov(m,p_t)
+			m:mov()
 		end
 	end
 	if p_t==1 then

@@ -7,6 +7,7 @@ __lua__
 function draw_game()
 	cls()
 	map()
+	
 --dead mob
 	for m in all(dmob) do
 		if sin(time()*8)>0 then
@@ -17,13 +18,23 @@ function draw_game()
 			del(dmob,m)
 		end
 	end	
+	
 --live mob
-	for m in all(mob) do
-		if m!=p_mob then
-			drawmob(m)
+	for i=#mob,1,-1 do
+		drawmob(mob[i])
+	end
+
+-- fog
+	for x=0,15 do
+		for y=0,15 do
+			if fog[x][y]==1 then
+				rectfill2(x*8,y*8,8,8,0)
+			end
 		end
-	end					
-	drawmob(p_mob)
+	end	
+	
+
+
 --damage value
 	for f in all(float) do
 		oprint8(f.txt,f.x,f.y,f.c,0)

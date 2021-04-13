@@ -30,7 +30,7 @@ end
 
 function dist(fx,fy,tx,ty)
 	local dx,dy=fx-tx,fy-ty
-	return (dx*dx+dy*dy)
+	return sqrt(dx*dx+dy*dy)
 end
 
 function dofade()
@@ -68,4 +68,17 @@ if(_wait==nil) _wait=0
 		flip()
 	until fadeperc==1
 	wait(_wait)
+end
+
+function blankmap(_dflt)
+	local ret={}
+	if (_dflt==nil) _dflt=0
+	
+	for x=0,15 do
+	 ret[x]={}
+	 for y=0,15 do
+	 	ret[x][y]=_dflt
+	 end
+	end
+	return ret
 end
