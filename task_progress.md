@@ -25,3 +25,7 @@ todo: line-of-sight algorithm gonna be modified...
 path finding!
 path finding!!
 path finding!!!
+
+# 4.14
+add itemUI
+add player attribute board
