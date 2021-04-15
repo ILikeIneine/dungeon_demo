@@ -29,3 +29,6 @@ path finding!!!
 # 4.14
 add itemUI
 add player attribute board
+
+# 4.15
+working with inventory, items and bag
