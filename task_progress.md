@@ -32,3 +32,10 @@ add player attribute board
 
 # 4.15
 working with inventory, items and bag
+
+# 4.16
+more about item system
+
+# 4.17 
+devloped throwing!
+we can raise things upon our head now!
