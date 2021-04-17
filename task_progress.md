@@ -39,3 +39,5 @@ more about item system
 # 4.17 
 devloped throwing!
 we can raise things upon our head now!
+
+begin to think about random rooms
