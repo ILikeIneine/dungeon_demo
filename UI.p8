@@ -20,9 +20,19 @@ function drawind()
 		wx+=4
 		wy+=4
 		clip(wx,wy,ww-8,wh-8)
+		if w.cur then
+			wx+=6
+		end
 		for i=1,#w.txt do
-			local txt=w.txt[i]
-			print(txt,wx,wy,6)
+			local txt,c=w.txt[i],6
+			if w.col and w.col[i] then
+				c=w.col[i]
+			end
+			
+			print(txt,wx,wy,c)
+			if i==w.cur then
+				spr(255,wx-5+sin(time()),wy)
+			end
 			wy+=6 --linefeeder
 		end -- for
 		clip()
@@ -44,8 +54,13 @@ function drawind()
 	end--for
 end
 
+function showmsg(txt,dur)
+	local wid=(#txt+2)*4+7
+	local w=addwind(63-wid/2,50,wid,13,{" "..txt})
+	w.dur=dur
+end
 
-function showmsg(txt)
+function showtalk(txt)
 	talkwind=addwind(16,32,94,#txt*6+7,txt)
 	talkwind.butt=true
 end
@@ -70,5 +85,101 @@ function dohpwind()
 	if p_mob.y<8 then
 		hpy=110
 	end
-	hpwind.y+=(hpy-hpwind.y)/5
+	hpwind.y+=(hpy-hpwind.y)/6
+end
+
+function showinv()
+	local txt,col,itm,eqt={},{}
+	_upd=update_inv
+	for i=1,2 do
+		itm=eqp[i]
+		if itm then
+			eqt=itm_name[itm]
+			add(col,10)
+		else
+			eqt= i==1 and "[weapon]" or "[armor]"
+			add(col,5)
+		end
+		add(txt,eqt)
+	end
+	add(txt,"…………………")
+	add(col,6)
+	for i=1,6 do
+		itm=inv[i]
+		if itm then
+			add(txt,itm_name[itm])
+			add(col,6)
+		else
+			add(txt,"…")
+			add(col,5)
+		end
+	end
+	invwind=addwind(5,17,84,64,txt)
+	invwind.cur=3
+	invwind.col=col
+
+	statwind=addwind(5,5,84,13,{"atk: "..p_mob.atk.."  def: "..p_mob.defmin.."-"..p_mob.defmax})
+	
+	curwind=invwind
+end
+
+function showuse()
+	local itm=invwind.cur<3 and eqp[invwind.cur] or inv[invwind.cur-3]
+	if itm==nil then return end
+	local typ,txt=itm_type[itm],{}
+
+	if (typ=="wep" or typ=="arm") and invwind.cur>3 then
+		add(txt,"equip")
+	end
+	if typ=="fud" then
+		add(txt,"eat")
+	end
+	if typ=="thr" or typ=="fud" then
+		add(txt,"throw")
+	end
+	add(txt,"trash")
+	
+	usewind=addwind(84,invwind.cur*6+11,36,7+#txt*6,txt)
+	usewind.cur=1
+	curwind=usewind
+end
+
+function triguse()
+	local verb,i,back=usewind.txt[usewind.cur],invwind.cur,true
+	local itm=i<3 and eqp[i] or inv[i-3]
+	if verb=="trash" then
+		if i<3 then
+			eqp[i]=nil
+		else
+			inv[i-3]=nil
+		end
+	elseif verb=="equip" then
+		local slot=2
+		if itm_type[itm]=="wep" then
+			slot=1
+		end
+		inv[i-3]=eqp[slot]
+		eqp[slot]=itm
+	elseif verb=="eat" then
+		eat(itm,p_mob)
+		_upd,inv[i-3]=update_pturn,nil
+		p_mob.mov=nil
+		back=false
+		p_t=0
+	elseif verb=="throw" then
+		_upd,thrslt,back=update_throw,i-3,false
+	end
+	
+	updatestats()
+	usewind.dur=0
+	
+	if back then
+		del(wind,invwind)
+		del(wind,statwind)
+		showinv()
+		invwind.cur=i
+	else 
+		invwind.dur=0
+		statwind.dur=0
+	end
 end

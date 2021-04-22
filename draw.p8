@@ -24,6 +24,31 @@ function draw_game()
 		drawmob(mob[i])
 	end
 
+--throw
+	if _upd==update_throw then
+		local tx,ty=throwtile()
+		local lx1=p_mob.x*8+3+thrdx*4
+		local ly1=p_mob.y*8+3+thrdy*4
+		local lx2=mid(0,tx*8+3,127)
+		local ly2=mid(0,ty*8+3,127)
+--		line(lx1+thrdy,ly1+thrdx,lx2+thrdy,ly2+thrdx,0)
+--		line(lx1-thrdy,ly1-thrdx,lx2-thrdy,ly2-thrdx,0)
+		rectfill(lx1+thrdy,ly1+thrdx,lx2-thrdy,ly2-thrdx,0)
+		local thrani,mb=flr(t/7)%2==0,getmob(tx,ty)
+		if thrani then
+			fillp(0b1010010110100101)
+		else
+			fillp(0b0101101001011010)
+		end
+		line(lx1,ly1,lx2,ly2,7)
+		fillp()
+		oprint8("+",lx2-1,ly2-2,7,0)
+		
+		if mb and thrani then
+			mb.flash=1
+		end
+	end
+
 -- fog
 	for x=0,15 do
 		for y=0,15 do
@@ -32,8 +57,6 @@ function draw_game()
 			end
 		end
 	end	
-	
-
 
 --damage value
 	for f in all(float) do

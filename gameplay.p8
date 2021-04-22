@@ -27,6 +27,10 @@ function moveplayer(dx,dy)
 	 else
 	 	if fget(tle,1) then
 	 		trig_bump(tle,destx,desty)
+	 	else
+	 		skipai=true
+	 		mset(destx,desty,1)
+	 		mazeworm()
 	 	end	 	
 	 end 
 	end
@@ -39,10 +43,18 @@ function trig_bump(tle,destx,desty)
 		--vase
 		sfx(3,1)
 		mset(destx,desty,1)
+		if rnd(3)<1 then
+			local itm=flr(rnd(#itm_name))+1
+			takeitem(itm)
+			showmsg(itm_name[itm],60)
+		end
 	elseif tle==10 or tle==12 then
 		--chest
 		sfx(5,1)
 		mset(destx,desty,tle-1)
+		local itm=flr(rnd(#itm_name))+1
+		takeitem(itm)
+		showmsg(itm_name[itm],60)
  elseif tle==13 then
   --door
   sfx(2,1)
@@ -50,7 +62,7 @@ function trig_bump(tle,destx,desty)
  elseif tle==6 then
  	--stone tablet
  	--showmsg("hello world",120)
- 	showmsg({"welcome to ","dark planet","","climb the mountain ","to reach the truth"})
+ 	showtalk({"welcome to ","dark planet","","climb the mountain ","to reach the truth"})
  end
 end
 
@@ -88,8 +100,12 @@ function inbounds(x,y)
 	return not(x<0 or y<0 or x>15 or y>15)
 end
 
-function hitmob(atkm,defm)
-	local dmg=atkm.atk
+function hitmob(atkm,defm,rowdmg)
+	local dmg= atkm and atkm.atk or rowdmg
+	
+	local def=defm.defmin+flr(rnd(defm.defmax-defm.defmin+1))
+	dmg-=min(def,dmg)
+	
 	defm.hp-=dmg
 	defm.flash=10
 	if atkm!=p_mob then
@@ -97,8 +113,11 @@ function hitmob(atkm,defm)
 	else
 		sfx(6)
 	end
-	addfloat("-"..dmg,defm.x*8,defm.y*8,9)
-	
+	if dmg==0 then
+		addfloat("!no dmg",defm.x*8,defm.y*8,6)
+	else
+		addfloat("-"..dmg,defm.x*8,defm.y*8,9)
+	end
 	if defm.hp<=0 then
 		--what if defm is player
 		add(dmob,defm)
@@ -106,6 +125,16 @@ function hitmob(atkm,defm)
 		defm.dur=60
 	end
 end
+
+function healmob(mb,hp)
+	hp=min(mb.hpmax-mb.hp,hp)
+	mb.hp+=hp
+	mb.flash=10
+	
+
+	addfloat("+"..hp,mb.x*8,mb.y*8,11)
+end
+
 
 function checkend()
 	if p_mob.hp<=0 then
@@ -121,7 +150,7 @@ end
 
 function los(x1, y1, x2, y2)
 	local frst, sx, sy, dx, dy=true
-
+	--★
 	if dist(x1,y1,x2,y2)==1 then return true end
 	if x1<x2 then
 		sx,dx=1,x2-x1
@@ -197,4 +226,58 @@ function calcdist(tx,ty)
 		cand = candnew
 	until #cand==0
 	return distmap
+end
+
+function updatestats()
+	local atk,dmin,dmax=1,0,0
+	if eqp[1] then
+		atk+=itm_stat1[eqp[1]]
+	end
+	
+	if eqp[2] then
+		dmin+=itm_stat1[eqp[2]]
+		dmax+=itm_stat2[eqp[2]]
+	end
+	p_mob.atk=atk
+	p_mob.defmin=dmin
+	p_mob.defmax=dmax
+end
+
+function eat(itm,mb)
+	local effect=itm_stat1[itm]
+	
+	if effect==1 then
+		--heal
+		healmob(mb,1)
+	end
+end
+
+function throw()
+	local itm,tx,ty=inv[thrslt],throwtile()
+	
+	if inbounds(tx,ty) then
+		local mb=getmob(tx,ty)
+		if mb then
+			if itm_type[itm]=="fud" then
+				eat(itm,mb)
+			else
+				hitmob(nil,mb,itm_stat1[itm])
+			end
+		end
+	end
+	mobbump(p_mob,thrdx,thrdy)
+	
+	inv[thrslt]=nil
+	p_t=0
+	_upd=update_pturn
+end
+
+function throwtile()
+	local tx,ty=p_mob.x,p_mob.y
+	
+	repeat
+		tx+=thrdx
+		ty+=thrdy
+	until not iswalkable(tx,ty,"checkmobs")
+	return tx,ty
 end

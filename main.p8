@@ -3,22 +3,35 @@ version 16
 __lua__
 
 function _init()
-  t=0
-  
-  dpal={0,1,1,2,1,13,6,4,4,9,3,13,1,13,14}
-  -- player animation
-  p_ani={240,241,242,243}
-  -- direction
-  dirx={-1,1,0,0,-1,1,-1,1}
-  diry={0,0,-1,1,-1,-1,1,1}
-  
-  mob_ani={240,192}
-  mob_atk={1,1}
-  mob_hp ={10,2}
-  mob_los={4,4}
-  debug={}
-  startgame()
+ t=0
  
+ dpal={0,1,1,2,1,13,6,4,4,9,3,13,1,13,14}
+ -- player animation
+ p_ani={240,241,242,243}
+ -- direction
+ -- ⬅️➡️⬆️⬇️
+ dirx={-1,1,0,0,1,1,-1,-1}
+ diry={0,0,-1,1,-1,1,1,-1}
+ 
+ thrdx,thrdy=1,0
+ 
+ mob_ani={240,192}
+ mob_atk={1,1}
+ mob_hp ={10,1}
+ mob_los={4,4}
+ 
+ itm_name={"grass swords","leather armor","red potion","ninja star","rusty sword"}
+	itm_type={"wep","arm","fud","thr","wep"}
+	itm_stat1={2,0,1,1,1}
+	itm_stat2={0,2,0,0,0}
+	--defmin
+	--defmax
+																	 	--⬇️         ➡️         ⬆️         ⬅️                       
+	crv_sig={0b11111111,0b11010110,0b01111100,0b11101001,0b10110011}
+	crv_msk={0,0b00001001,0b00000011,0b00000110,0b00001100}
+ debug={}
+ startgame()
+
 end
  
  
@@ -45,20 +58,33 @@ function startgame()
 	fadeperc=1
  buttbuff=-1
 
+	skipai=false
+	
  mob={}
  dmob={}
  p_mob=addmob(1,1,1)
-   
- for x=0,15 do
- 	for y=0,15 do
-  	if mget(x,y)==192 then
- 			addmob(2,x,y)
- 			mset(x,y,1)
- 		end
- 	end
- end
+ 
+-- for x=0,15 do
+-- 	for y=0,15 do
+-- 		if mget(x,y)==192 then
+-- 			addmob(2,x,y)
+-- 			mset(x,y,1)
+-- 		end
+-- 	end
+-- end
 
  p_t=0 
+ 
+ inv,eqp={},{}
+ --eqp[1] -weapon
+ --eqp[2] -armor
+ --inv[1-6] - inventory
+-- takeitem(1)
+-- takeitem(2)
+-- takeitem(3)
+-- takeitem(4)
+-- takeitem(5)
+ 
  wind={} 
  float={}
  fog=blankmap(0)
@@ -69,5 +95,5 @@ function startgame()
  _upd=update_game
  _drw=draw_game
  unfog()
- calcdist(p_mob.x,p_mob.y)
+	mapgen()
 end

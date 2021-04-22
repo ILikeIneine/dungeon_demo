@@ -41,3 +41,14 @@ devloped throwing!
 we can raise things upon our head now!
 
 begin to think about random rooms
+
+# 4.19
+lots of players or programers thoughts that
+procedure generation is like kinds of solves problem
+
+says that i dont have to do level design, just procedure generation.
+but its a lot more difficult then just making a level
+
+# 4.20
+working on rooms generation and maze
+it's so fucking hard...

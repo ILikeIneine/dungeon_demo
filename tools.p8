@@ -82,3 +82,7 @@ function blankmap(_dflt)
 	end
 	return ret
 end
+
+function getrnd(arr)
+	return arr[1+flr(rnd(#arr))]
+end

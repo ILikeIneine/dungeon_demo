@@ -2,7 +2,7 @@ pico-8 cartridge // http://www.pico-8.com
 version 16
 __lua__
 
---mobs
+--mobs and items
 
 function addmob(typ,mx,my)
 	local m={
@@ -13,9 +13,11 @@ function addmob(typ,mx,my)
 		flp=false,
 		ani={},
 		flash=0,
-		hp =mob_hp[typ],
+		hp=mob_hp[typ],
 		hpmax=mob_hp[typ],
 		atk=mob_atk[typ],
+		defmin=0,
+		defmax=0,
 		los=mob_los[typ],
 		task=ai_wait
 	}
@@ -41,9 +43,9 @@ function mobbump(mb,dx,dy)
 	mobflip(mb,dx)
 	mb.sox,mb.soy=dx*8,dy*8
 	mb.ox,mb.oy=0,0
-	--debug[4]=mb.ox..mb.oy
 	mb.mov=mov_bump -- unwalkable
 end
+
 
 function mobflip(mb,dx)
 	mb.flp = dx==0 and mb.flp or dx<0
@@ -68,7 +70,8 @@ function doai()
 		if m!=p_mob then
 		--	debug[1]=los(m.x,m.y,p_mob.x,p_mob.y)
 			m.mov=nil
-			moving=moving or m.task(m)
+			-- bug
+			moving=m.task(m) or moving
 		end
 	end
 	if moving then
@@ -105,7 +108,7 @@ function ai_attac(m)
 			m.task=ai_wait
 			addfloat("?",m.x*8+4,m.y*8,8)
 		else 
-			local bdst,bx,by=999,0,0
+			local bdst,cand=999,{}
 			calcdist(m.tx,m.ty)
 			for i=1,4 do
 				local dx,dy=dirx[i],diry[i]
@@ -113,12 +116,19 @@ function ai_attac(m)
 				if iswalkable(tx,ty,"checkmobs") then
 					local dst=distmap[tx][ty]
 					if dst<bdst then
-						bdst,bx,by=dst,dx,dy
+						cand={}
+						bdst=dst
+					end
+					if dst==bdst then
+						add(cand,{x=dx,y=dy})
 					end
 				end
 			end
-			mobwalk(m,bx,by)
-			return true
+			if #cand>0 then
+				local c=getrnd(cand)
+				mobwalk(m,c.x,c.y)
+				return true
+			end
 		end
 	end
 	return false
@@ -126,4 +136,26 @@ end
 
 function cansee(m1,m2)
 	return dist(m1.x,m1.y,m2.x,m2.y)<=m1.los and los(m1.x,m1.y,m2.x,m2.y)
+end
+
+
+--------------------------
+--items
+--------------------------
+
+function takeitem(itm)
+	local i=freeinvslot()
+	if i==0 then return false end
+	inv[i]=itm
+	return true
+end
+
+--find a free slot
+function freeinvslot()
+	for i=1,6 do
+		if not inv[i] then
+			return i
+		end
+	end
+	return 0
 end
