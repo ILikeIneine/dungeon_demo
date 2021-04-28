@@ -52,3 +52,20 @@ but its a lot more difficult then just making a level
 # 4.20
 working on rooms generation and maze
 it's so fucking hard...
+
+# 4.24
+dealing with bugs these days
+still not solved..
+
+doors broken!
+i do not know how to deal with it
+
+# 4.25
+TODO: no doors next to doors
+      vases
+      decorations
+      monsters
+
+# 4.26~28
+bug fixing and 
+tiles optimization
