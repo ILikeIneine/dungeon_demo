@@ -183,3 +183,7 @@ function triguse()
 		statwind.dur=0
 	end
 end
+
+function floormsg()
+	showmsg("floor "..floor,120)
+end

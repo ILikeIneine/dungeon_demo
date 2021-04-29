@@ -15,7 +15,6 @@ function update_game()
 		dobutt(buttbuff)
 		buttbuff=-1
 	end
-	debug[1]=getsig(p_mob.x,p_mob.y)
 end --function
 
 function update_inv()
@@ -68,22 +67,18 @@ function update_pturn()
 	checkbuttbuff()
 	p_t=min(p_t+0.125,1)
 	
-	
 	if p_mob.mov then
 		p_mob:mov()
 	end
 	
-	
 	if p_t==1 then	
 		_upd=update_game
-		if checkend() then
-			if skipai then
-				skipai=false
-			else
-				doai()
-			end
+		if trig_step() then return end
+		if checkend() and not skipai then
+			doai()
 		end
-		calcdist(p_mob.x,p_mob.y)
+		skipai=false
+--		calcdist(p_mob.x,p_mob.y)
 	end--if
 end
 

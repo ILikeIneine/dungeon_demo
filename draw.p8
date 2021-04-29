@@ -6,6 +6,7 @@ __lua__
 
 function draw_game()
 	cls()
+	if fadeperc==1 then return end
 	map()
 	
 --dead mob
@@ -57,6 +58,15 @@ function draw_game()
 			end
 		end
 	end	
+	
+---- flags
+--	for x=0,15 do
+--		for y=0,15 do
+--			if flags[x][y]!=0 then
+--				pset(x*8+3,y*8+5,flags[x][y])
+--			end
+--		end
+--	end	
 
 --damage value
 	for f in all(float) do
@@ -76,4 +86,9 @@ end
 function draw_gover()
 	cls(2)
 	print("y ded",50,50,7)
+end
+
+function draw_win()
+	cls(2)
+	print("y win",50,50,7)
 end

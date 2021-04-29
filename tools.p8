@@ -86,3 +86,16 @@ end
 function getrnd(arr)
 	return arr[1+flr(rnd(#arr))]
 end
+
+function copymap(x,y)
+	local tle
+	for _x=0,15 do
+		for _y=0,15 do
+			tle=mget(_x+x,_y+y)
+			mset(_x,_y,tle)
+			if tle==15 then
+				p_mob.x,p_mob.y=_x,_y
+			end
+		end
+	end
+end

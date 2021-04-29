@@ -30,7 +30,6 @@ function moveplayer(dx,dy)
 	 	else
 	 		skipai=true
 	 		mset(destx,desty,1)
-	 		mazeworm()
 	 	end	 	
 	 end 
 	end
@@ -62,8 +61,24 @@ function trig_bump(tle,destx,desty)
  elseif tle==6 then
  	--stone tablet
  	--showmsg("hello world",120)
- 	showtalk({"welcome to ","dark planet","","climb the mountain ","to reach the truth"})
+ 	if floor==0 then
+ 	 showtalk({"welcome to ","dark planet","","climb the mountain ","to reach the truth"})
+ 	end
+ 	if floor==winfloor then
+ 		win=true
+		end
  end
+end
+
+function trig_step()
+	local tle=mget(p_mob.x,p_mob.y)
+	if tle==14 then
+			fadeout()
+			genfloor(floor+1)
+			floormsg()
+			return true
+	end
+	return false
 end
 
 function getmob(x,y)
@@ -137,7 +152,12 @@ end
 
 
 function checkend()
-	if p_mob.hp<=0 then
+	if win then
+		wind={}
+		_upd=update_gover
+		_drw=draw_win
+		fadeout(0.02)
+	elseif p_mob.hp<=0 then
 		wind={}
 		_upd=update_gover
 		_drw=draw_gover
@@ -204,7 +224,7 @@ end
 
 function calcdist(tx,ty)
 	--unreachable
-	local cand,step={},0
+	local cand,step,candnew={},0
 	distmap=blankmap(-1)
 	add(cand,{x=tx,y=ty})
 	distmap[tx][ty]=0
