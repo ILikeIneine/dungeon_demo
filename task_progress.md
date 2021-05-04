@@ -69,3 +69,10 @@ TODO: no doors next to doors
 # 4.26~28
 bug fixing and 
 tiles optimization
+
+# 5.2
+merely finished
+todo: when door is opened, change tile around it
+
+# 5.4
+complete items and monsters
