@@ -70,10 +70,12 @@ TODO: no doors next to doors
 bug fixing and 
 tiles optimization
 
+# 5.1
+Edition II 启动
 # 5.2
 merely finished
 todo: when door is opened, change tile around it
-第二版修改中
+Edition II 修改中
 # 5.4
 complete items and monsters
 
@@ -81,7 +83,8 @@ complete items and monsters
 almost there!
 00 ：52
 首版完成！
+
 # 5.6
-第二版修改企划
+Edition II修改企划
 for second edition 
 copyright@ alphawoork!
