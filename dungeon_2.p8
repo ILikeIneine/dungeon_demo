@@ -1,8 +1,7 @@
 pico-8 cartridge // http://www.pico-8.com
 version 32
 __lua__
--- porklike: wurst comes to worst
--- by krystian majewski, lazy devs
+-- edition: wurst comes to worst
 
 function _init()
  cartdata("porklike")

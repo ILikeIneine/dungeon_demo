@@ -73,9 +73,15 @@ tiles optimization
 # 5.2
 merely finished
 todo: when door is opened, change tile around it
-
+第二版修改中
 # 5.4
 complete items and monsters
 
 # 5.5
 almost there!
+00 ：52
+首版完成！
+# 5.6
+第二版修改企划
+for second edition 
+copyright@ alphawoork!
