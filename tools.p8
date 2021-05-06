@@ -99,3 +99,50 @@ function copymap(x,y)
 		end
 	end
 end
+
+function explode(s)
+	local retval,lastpos={},1
+	for i=1,#s do
+		if sub(s,i,i)=="," then
+			add(retval,sub(s, lastpos, i-1))
+			i+=1
+			lastpos=i
+		end
+	end
+	add(retval,sub(s,lastpos,#s))
+	return retval
+end
+
+function explodeval(_arr)
+	return toval(explode(_arr))
+end
+
+function toval(_arr)
+	local _retarr={}
+	for _i in all(_arr) do
+		add(_retarr,tonum(_i))
+	end
+	return _retarr
+end
+
+function doshake()
+	local shakex,shakey=16-rnd(32),16-rnd(32)
+	camera(shakex*shake,shakey*shake)
+	shake*=0.95
+	if (shake<0.05) shake=0
+end
+
+function dopenning()
+	for w=3,68,.1 do
+		a=4/w+time()/4
+		k=145/w
+		x=64+cos(a)*k
+		y=64+sin(a)*k
+		i=35/w+2+time()*3
+		rect(x-w,y-w,x+w,y+w,f(i)*16+f(i+.5))
+	end
+end
+
+function f(i)
+	return open_c[flr(1.5+abs(6-i%12))]
+end

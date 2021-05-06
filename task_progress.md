@@ -76,3 +76,6 @@ todo: when door is opened, change tile around it
 
 # 5.4
 complete items and monsters
+
+# 5.5
+almost there!

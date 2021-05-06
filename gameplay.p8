@@ -11,8 +11,9 @@ function moveplayer(dx,dy)
 	local tle=mget(destx,desty)
 	
 	if iswalkable(destx,desty,"checkmobs") then
-		sfx(0,0)
+		sfx(63)
 		mobwalk(p_mob,dx,dy)
+		st_steps+=1
 		p_t=0
 		_upd=update_pturn
 	else
@@ -29,7 +30,7 @@ function moveplayer(dx,dy)
 	 		trig_bump(tle,destx,desty)
 	 	else
 	 		skipai=true
-	 		mset(destx,desty,1)
+	 		--mset(destx,desty,1)
 	 	end	 	
 	 end 
 	end
@@ -40,39 +41,64 @@ function trig_bump(tle,destx,desty)
 	
 	if tle==7 or tle==8 then
 		--vase
-		sfx(3,1)
-		mset(destx,desty,1)
-		if rnd(3)<1 then
-			local itm=flr(rnd(#itm_name))+1
-			takeitem(itm)
-			showmsg(itm_name[itm],60)
+		sfx(59)
+		mset(destx,desty,76)
+		if rnd(3)<1 and floor>0 then
+			if rnd(5)<1 then
+				sfx(60)
+				addmob(getrnd(mobpool),destx,desty)
+			else
+				if freeinvslot()==0 then
+					showmsg("bag fulled!",120)
+					sfx(60)
+				else
+			  sfx(61)
+					local itm=getrnd(fipool_comm)
+					takeitem(itm)
+					showmsg(itm_name[itm].."!",60)
+				end
+			end
 		end
 	elseif tle==10 or tle==12 then
 		--chest
-		sfx(5,1)
-		mset(destx,desty,tle-1)
-		local itm=flr(rnd(#itm_name))+1
-		takeitem(itm)
-		showmsg(itm_name[itm],60)
+		if freeinvslot()==0 then
+			showmsg("bag fulled!",120)
+			skipai=true
+			sfx(60)
+		else
+			local itm=getrnd(fipool_comm)
+			if tle==12 then
+				itm=getitm_rare()
+			end
+			sfx(61)
+			mset(destx,desty,tle-1)
+			takeitem(itm)
+			showmsg(itm_name[itm].."!",60)
+		end
  elseif tle==13 then
   --door
-  sfx(2,1)
+  sfx(62)
   mset(destx,desty,1)
  elseif tle==6 then
  	--stone tablet
  	--showmsg("hello world",120)
  	if floor==0 then
- 	 showtalk({"welcome to ","dark planet","","climb the mountain ","to reach the truth"})
- 	end
- 	if floor==winfloor then
- 		win=true
+ 		sfx(54)
+ 	 showtalk(explode("welcome to ,dark planet,,climb the mountain ,to reach the truth"))
 		end
+		
+	elseif tle==110 then
+		--kielbasa
+		win=true
  end
 end
 
 function trig_step()
 	local tle=mget(p_mob.x,p_mob.y)
+	--floors 
 	if tle==14 then
+			sfx(55)
+			p_mob.bless=0
 			fadeout()
 			genfloor(floor+1)
 			floormsg()
@@ -117,24 +143,40 @@ end
 
 function hitmob(atkm,defm,rowdmg)
 	local dmg= atkm and atkm.atk or rowdmg
-	
+
+	--add curse/bless
+	if defm.bless<0 then
+		dmg*=2
+	elseif defm.bless>0 then
+		dmg=flr(dmg/2)
+	end
+	defm.bless=0
 	local def=defm.defmin+flr(rnd(defm.defmax-defm.defmin+1))
 	dmg-=min(def,dmg)
 	
 	defm.hp-=dmg
 	defm.flash=10
-	if atkm!=p_mob then
-		sfx(1)
+	if defm==p_mob then
+		shake=0.08
+		sfx(57)
 	else
-		sfx(6)
+		shake=0.03
+		sfx(58)
 	end
 	if dmg==0 then
-		addfloat("!no dmg",defm.x*8,defm.y*8,6)
+		addfloat("no dmg!",defm.x*8,defm.y*8,6)
 	else
 		addfloat("-"..dmg,defm.x*8,defm.y*8,9)
 	end
+	
+	
 	if defm.hp<=0 then
 		--what if defm is player
+		if defm!=p_mob then
+			st_kills+=1
+		else
+			st_killer=atkm.name
+		end
 		add(dmob,defm)
 		del(mob,defm)
 		defm.dur=60
@@ -145,43 +187,78 @@ function healmob(mb,hp)
 	hp=min(mb.hpmax-mb.hp,hp)
 	mb.hp+=hp
 	mb.flash=10
-	
 
 	addfloat("+"..hp,mb.x*8,mb.y*8,11)
+	sfx(51)
 end
 
+function stunmob(mb)
+	mb.stun=true
+	mb.flash=10
+
+	addfloat("stun",mb.x*8-3,mb.y*8,7)
+	sfx(51)
+end
+
+function blessmob(mb,val)
+	mb.bless=mid(-1,1,mb.bless+val)
+	mb.flash=10
+	
+	local txt="bless"
+	if val<0 then txt="curse" end
+
+	addfloat(txt,mb.x*8-6,mb.y*8,7)
+	
+	if mb.spec=="ghost" and val>0 then
+		add(dmob,defm)
+		del(mob,mb)
+		mb.dur=10
+	end
+	sfx(51)
+end
 
 function checkend()
 	if win then
-		wind={}
-		_upd=update_gover
-		_drw=draw_win
-		fadeout(0.02)
+		music(24)
+		gover_spr=112
+		gover_x=30
+		gover_w=9
+		showgover()
+		return false
 	elseif p_mob.hp<=0 then
-		wind={}
-		_upd=update_gover
-		_drw=draw_gover
-		fadeout(0.02)
-		reload(0x2000,0x2000,0x1000)
+		music(22)
+		gover_spr=80
+		gover_x=30 
+		gover_w=9
+		showgover()
 		return false
 	end
 	return true
 end 
 
+function showgover()
+		wind={}
+		_upd=update_gover
+		_drw=draw_gover
+		fadeout(0.02)
+end
+
 function los(x1, y1, x2, y2)
 	local frst, sx, sy, dx, dy=true
 	--★
 	if dist(x1,y1,x2,y2)==1 then return true end
+	
+	if y1>y2 then
+		x1,x2,y1,y2=x2,x1,y2,y1
+	end
+		sy,dy=1,y2-y1
+	
 	if x1<x2 then
 		sx,dx=1,x2-x1
 	else
 		sx,dx=-1,x1-x2
 	end
-	if y1<y2 then
-		sy,dy=1,y2-y1
-	else
-		sy,dy=-1,y1-y2
-	end
+	
 	local err, e2 = dx-dy
 	
 	while not(x1==x2 and y1==y2) do
@@ -266,15 +343,39 @@ end
 function eat(itm,mb)
 	local effect=itm_stat1[itm]
 	
+	if not itm_known[itm] then
+		showmsg(itm_name[itm].." "..itm_desc[itm],120)
+		itm_known[itm]=true
+	end
+	if mb==p_mob then
+	 st_meals+=1
+	end
+	
 	if effect==1 then
 		--heal
 		healmob(mb,1)
+	elseif effect==2 then
+		--heal a lot
+		healmob(mb,3)
+	elseif effect==3 then
+		--plus maxhp
+		mb.hpmax+=2
+		healmob(mb,1)
+	elseif effect==4 then
+		--stun
+		stunmob(mb)
+	elseif effect==5 then
+		--curse
+		blessmob(mb,-1)
+	elseif effect==6 then
+		--bless
+		blessmob(mb,1)
 	end
 end
 
 function throw()
 	local itm,tx,ty=inv[thrslt],throwtile()
-	
+	sfx(52)
 	if inbounds(tx,ty) then
 		local mb=getmob(tx,ty)
 		if mb then
@@ -282,6 +383,7 @@ function throw()
 				eat(itm,mb)
 			else
 				hitmob(nil,mb,itm_stat1[itm])
+				sfx(58)
 			end
 		end
 	end
