@@ -6,7 +6,36 @@ __lua__
 function _init()
  cartdata("porklike")
  ver="v3"
- t,tani,buttbuff,fadetable,dirx,diry,dirpos,invdir,mob_ani,mob_type,mob_hp,mob_brain,brain_w,brain_a,mob_aspd,mob_plan,pick_name,pick_desc2d,crv_sig,crv_msk,dor_sig,dor_msk,free_sig,free_msk,wall_sig,wall_msk,tleaniadd,tleanisub,boomspr,spinspr,dirtle,voitle=0,0,0,explode2d("0,0,0,0,0,0,0,0,0,0,0,0,0,0,0|1,1,129,129,129,129,129,129,129,129,0,0,0,0,0|2,2,2,130,130,130,130,130,128,128,128,128,128,0,0|3,3,3,131,131,131,131,129,129,129,129,129,0,0,0|4,4,132,132,132,132,132,132,130,128,128,128,128,0,0|5,5,133,133,133,133,130,130,128,128,128,128,128,0,0|6,6,134,13,13,13,141,5,5,5,133,130,128,128,0|7,6,6,6,134,134,134,134,5,5,5,133,130,128,0|8,8,136,136,136,136,132,132,132,130,128,128,128,128,0|9,9,9,4,4,4,4,132,132,132,128,128,128,128,0|10,10,138,138,138,4,4,4,132,132,133,128,128,128,0|11,139,139,139,139,3,3,3,3,129,129,129,0,0,0|12,12,12,140,140,140,140,131,131,131,1,129,129,129,0|13,13,141,141,5,5,5,133,133,130,129,129,128,128,0|14,14,14,134,134,141,141,2,2,133,130,130,128,128,0|15,143,143,134,134,134,134,5,5,5,133,133,128,128,0"),explodeval("-1,1,0,0,1,1,-1,-1"),explodeval("0,0,-1,1,-1,1,1,-1"),explodeval("-1,1,-18,18,-17,19,17,-19"),explodeval("2,1,4,3"),explode("164|165|166|167,128|129|128|130,134|135|136|137,138|139|138|140,131|132|131|133,141|142|143|142,144|145|146|147,187|188|189|190,151|152|153|152,154|154|154|154|154|154|154|154|154|154|154|154|155,156|156|156|157,158|158|158|159,160,161,162"),explode("pl,ai,ai,ai,ai,ai,ai,ai,we,ob,we,we,ob,ob,ob"),explodeval("5,1,1,1,2,1,1,10,1,1,1,1,1,1,1"),explodeval("1,2,4,2,2,2,5,6,3,1,1,1,1,1,1"),{ai_blank,ai_wait,ai_weed,ai_wait,ai_wait,ai_reaper},{ai_blank,ai_attac,ai_weed,ai_queen,ai_kong,ai_reaper},explodeval("1,2,2,2,1.8,1.5,2,1.5,1.5,3,1,1,1,1,1"),explode2d("2,2,2,2,2|2,2,3,2,2,3|2,2,3,2,2,3,2|4,4,4,5,4,4,4,5|4,4,5,4,4,5,4,4,5|5,4,5,4,4,5,4,4,5|6,6,6,7,6,6,6,7,6|6,6,7,6,6,7,6,6,7|6,7,6,7,6,7,6,7,6"),explode("jump,bolt,push,grapple,spear,smash,hook,spin,suplex,slap"),explode2d("jumps 2 spaces,stops enemies,you skip over|ranged attack,does 1 damage,and stops enemy|ranged attack,pushes enemy 1 space,and stops them|pulls yourself up to,the next occupied,space|hits 2 spaces in,any direction,|smashes a wall,or does 2 damage,|pulls an enemy,1 space towards you,and stops them|hits 4 spaces around,you,|lifts and throws,an enemy behind you,stops enemy|hits an enemy and,hops backwards,stops enemy",explode),explodeval("255,214,124,179,233"),explodeval("0,9,3,12,6"),explodeval("192,48"),explodeval("15,15"),explodeval("0,0,0,0,16,64,32,128,161,104,84,146"),explodeval("8,4,2,1,6,12,9,3,10,5,10,5"),explodeval("251,233,253,84,146,80,16,144,112,208,241,248,210,177,225,120,179,0,124,104,161,64,240,128,224,176,242,244,116,232,178,212,247,214,254,192,48,96,32,160,245,250,243,249,246,252"),explodeval("0,6,0,11,13,11,15,13,3,9,0,0,9,12,6,3,12,15,3,7,14,15,0,15,6,12,0,0,3,6,12,9,0,9,0,15,15,7,15,14,0,0,0,0,0,0"),explodeval("64,66,80"),explodeval("65,67,81"),explodeval("89,90,91,92"),explodeval("105,106,107,108"),explodeval("74,75,76"),explodeval("11,11,11,11,11,11,10")
+ t=0
+ tani=0
+ buttbuff=0
+ fadetable=explode2d("0,0,0,0,0,0,0,0,0,0,0,0,0,0,0|1,1,129,129,129,129,129,129,129,129,0,0,0,0,0|2,2,2,130,130,130,130,130,128,128,128,128,128,0,0|3,3,3,131,131,131,131,129,129,129,129,129,0,0,0|4,4,132,132,132,132,132,132,130,128,128,128,128,0,0|5,5,133,133,133,133,130,130,128,128,128,128,128,0,0|6,6,134,13,13,13,141,5,5,5,133,130,128,128,0|7,6,6,6,134,134,134,134,5,5,5,133,130,128,0|8,8,136,136,136,136,132,132,132,130,128,128,128,128,0|9,9,9,4,4,4,4,132,132,132,128,128,128,128,0|10,10,138,138,138,4,4,4,132,132,133,128,128,128,0|11,139,139,139,139,3,3,3,3,129,129,129,0,0,0|12,12,12,140,140,140,140,131,131,131,1,129,129,129,0|13,13,141,141,5,5,5,133,133,130,129,129,128,128,0|14,14,14,134,134,141,141,2,2,133,130,130,128,128,0|15,143,143,134,134,134,134,5,5,5,133,133,128,128,0")
+ dirx,diry,dirpos=explodeval("-1,1,0,0,1,1,-1,-1"),explodeval("0,0,-1,1,-1,1,1,-1"),explodeval("-1,1,-18,18,-17,19,17,-19")
+ invdir=explodeval("2,1,4,3")
+ mob_ani=explode("164|165|166|167,128|129|128|130,134|135|136|137,138|139|138|140,131|132|131|133,141|142|143|142,144|145|146|147,187|188|189|190,151|152|153|152,154|154|154|154|154|154|154|154|154|154|154|154|155,156|156|156|157,158|158|158|159,160,161,162")
+ mob_type=explode("pl,ai,ai,ai,ai,ai,ai,ai,we,ob,we,we,ob,ob,ob")
+ mob_hp=explodeval("5,1,1,1,2,1,1,10,1,1,1,1,1,1,1")
+ mob_brain=explodeval("1,2,4,2,2,2,5,6,3,1,1,1,1,1,1")
+ brain_w={ai_blank,ai_wait,ai_weed,ai_wait,ai_wait,ai_reaper}
+ brain_a={ai_blank,ai_attac,ai_weed,ai_queen,ai_kong,ai_reaper}
+ mob_aspd=explodeval("0,2,2,2,1.8,1.5,2,1.5,1.5,3,1,1,1,1,1")
+ mob_plan=explode2d("2,2,2,2,2|2,2,3,2,2,3|2,2,3,2,2,3,2|4,4,4,5,4,4,4,5|4,4,5,4,4,5,4,4,5|5,4,5,4,4,5,4,4,5|6,6,6,7,6,6,6,7,6|6,6,7,6,6,7,6,6,7|6,7,6,7,6,7,6,7,6")
+ pick_name=explode("jump,bolt,push,grapple,spear,smash,hook,spin,suplex,slap")
+ pick_desc2d=explode2d("jumps 2 spaces,stops enemies,you skip over|ranged attack,does 1 damage,and stops enemy|ranged attack,pushes enemy 1 space,and stops them|pulls yourself up to,the next occupied,space|hits 2 spaces in,any direction,|smashes a wall,or does 2 damage,|pulls an enemy,1 space towards you,and stops them|hits 4 spaces around,you,|lifts and throws,an enemy behind you,stops enemy|hits an enemy and,hops backwards,stops enemy",explode)
+ crv_sig=explodeval("255,214,124,179,233")
+ crv_msk=explodeval("0,9,3,12,6")
+ dor_sig=explodeval("192,48")
+ dor_msk=explodeval("15,15")
+ free_sig=explodeval("0,0,0,0,16,64,32,128,161,104,84,146")
+ free_msk=explodeval("8,4,2,1,6,12,9,3,10,5,10,5")
+ wall_sig=explodeval("251,233,253,84,146,80,16,144,112,208,241,248,210,177,225,120,179,0,124,104,161,64,240,128,224,176,242,244,116,232,178,212,247,214,254,192,48,96,32,160,245,250,243,249,246,252")
+ wall_msk=explodeval("0,6,0,11,13,11,15,13,3,9,0,0,9,12,6,3,12,15,3,7,14,15,0,15,6,12,0,0,3,6,12,9,0,9,0,15,15,7,15,14,0,0,0,0,0,0")
+ tleaniadd=explodeval("64,66,80")
+ tleanisub=explodeval("65,67,81")
+ boomspr=explodeval("89,90,91,92")
+ spinspr=explodeval("105,106,107,108")
+ dirtle=explodeval("74,75,76")
+ voitle=explodeval("11,11,11,11,11,11,10")
  startgame()
 end
 
@@ -49,7 +78,27 @@ end
 function startgame()
  poke(0x3101,194)
  music"0"
- fadeperc,chain,chainsafe,buttbuff,logo_t,logo_y,hpwind,win,winfloor,turn,key,_upd,_drw,tmap,😐,floats,wind,sprs,eqp,st_steps,st_kills=1,dget(0),true,0,240,35,nil,false,10,"ai",0,update_anis,draw_game,blankmap(1),addmob(1,20),{},{},{},{},0,0  
+ fadeperc=1
+ chain=dget(0)
+ chainsafe=true
+ buttbuff=0
+ logo_t=240
+ logo_y=35
+ hpwind=nil
+ win=false
+ winfloor=10
+ turn="ai"
+ key=0
+ _upd=update_anis
+ _drw=draw_game
+ tmap=blankmap(1)
+ 😐=addmob(1,20)
+ floats={}
+ wind={}
+ sprs={}
+ eqp={}
+ st_steps=0
+ st_kills=0  
  genfloor(0)
 end
 -->8
