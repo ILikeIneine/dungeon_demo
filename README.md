@@ -1,5 +1,5 @@
 # dungeon_demo
-This is for my Graduation Project which is also my first game!
+This is my Graduation Project, which is also my first game!
+Not much polish but I love it!
 
-learned from Lazy_devs 
-please follow them in youtube!
+
